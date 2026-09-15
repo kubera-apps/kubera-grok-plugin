@@ -1,0 +1,18 @@
+{
+  "name": "kubera-plugin-marketplace",
+  "description": "Kubera plugin for Grok.",
+  "owner": {
+    "name": "Kubera Apps, Inc."
+  },
+  "plugins": [
+    {
+      "name": "kubera",
+      "description": "Query your live Kubera portfolio — net worth, assets, debts, allocation, performance and history — through Kubera's hosted MCP server.",
+      "category": "productivity",
+      "source": "./",
+      "homepage": "https://www.kubera.com",
+      "keywords": ["kubera", "net worth", "kubera portfolio"],
+      "domains": ["kubera.com"]
+    }
+  ]
+}

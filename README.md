@@ -1,9 +1,9 @@
-# Kubera for Cursor
+# Kubera
 
-Ask about your real net worth, portfolio and holdings directly in Cursor.
+Ask about your real net worth, portfolio and holdings directly in Cursor and Grok.
 
-This plugin connects Cursor to [Kubera](https://www.kubera.com)'s hosted MCP
-server. Install it, sign in once with OAuth, and ask questions like:
+This plugin connects your assistant to [Kubera](https://www.kubera.com)'s hosted
+MCP server. Install it, sign in once with OAuth, and ask questions like:
 
 - "What's my net worth?"
 - "How am I allocated across stocks, cash, crypto and real estate?"
@@ -14,12 +14,14 @@ server. Install it, sign in once with OAuth, and ask questions like:
 
 | Path | Purpose |
 | --- | --- |
-| `.cursor-plugin/plugin.json` | Plugin manifest (name, logo, metadata) |
-| `mcp.json` | Points Cursor at Kubera's remote MCP server |
+| `.mcp.json` | Points the host at Kubera's remote MCP server |
+| `.grok-plugin/plugin.json` | Grok plugin manifest |
+| `.grok-plugin/marketplace.json` | Self-hosted catalog entry, for local install and testing |
+| `.cursor-plugin/plugin.json` | Cursor plugin manifest (name, logo, metadata) |
 | `skills/kubera-portfolio/SKILL.md` | Tells the model when to call Kubera, and to confirm before any write |
 | `assets/logo.svg` | Marketplace logo |
 
-## Install
+## Install — Cursor
 
 **From the Marketplace** — search for *Kubera* and click **Add**. Cursor opens
 Kubera's OAuth consent screen; approve it and the tools are live.
@@ -27,22 +29,55 @@ Kubera's OAuth consent screen; approve it and the tools are live.
 **Locally, for development:**
 
 ```bash
-git clone https://github.com/kubera/kubera-grok-plugin ~/.cursor/plugins/local/kubera
+git clone https://github.com/kubera-apps/kubera-grok-plugin ~/.cursor/plugins/local/kubera
 ```
 
 Then reload Cursor (`Cmd+Shift+P` → *Developer: Reload Window*), open the MCP
 settings, connect **kubera** via OAuth, and ask "What's my net worth?".
 
+## Install — Grok
+
+Grok connects to Kubera as a custom connector:
+
+1. Go to [grok.com/connectors](https://grok.com/connectors) and click **New Connector**.
+2. Choose **Custom** and enter the MCP server URL:
+   `https://api.kubera.com/api/v1/mcp`
+3. Complete the OAuth sign-in when prompted.
+
+Grok then discovers Kubera's tools and makes them available in conversations.
+
 ## Authentication
 
 The server is a remote MCP endpoint at `https://api.kubera.com/api/v1/mcp` and
-authenticates with OAuth 2.1 — Cursor runs the flow on first use. You need an
+authenticates with OAuth 2.1 — the host runs the flow on first use. You need an
 active Kubera account.
+
+Discovery is standard and requires no configuration:
+
+| Document | URL |
+| --- | --- |
+| Protected resource metadata (RFC 9728) | `https://api.kubera.com/.well-known/oauth-protected-resource` |
+| Authorization server metadata (RFC 8414) | `https://api.kubera.com/.well-known/oauth-authorization-server` |
+
+Authorization code + PKCE (S256) with refresh tokens. Client identity uses a
+Client ID Metadata Document (`client_id_metadata_document_supported: true`); the
+host presents its own metadata URL, so no client ID or secret is configured here.
 
 **There are no secrets in this repository, and none are needed.** Nothing here
 should ever contain a client secret, API key or token. See
 [Kubera's AI assistants guide](https://help.kubera.com/article/173-ai-assistants-part-2)
 for the connector setup this plugin automates.
+
+## Network and permissions
+
+| Host | Purpose |
+| --- | --- |
+| `api.kubera.com` | MCP endpoint, OAuth discovery and token exchange |
+| `app.kubera.com` | OAuth authorization and consent screen |
+
+Scopes requested: `read_profile`, `read_portfolio`, `write_portfolio`.
+
+No telemetry, no third-party network calls, no local file or shell access.
 
 ## Tools
 
@@ -55,7 +90,7 @@ sheets, sections and items; cash flow; default portfolio.
 ## Support
 
 - Docs: https://help.kubera.com
-- Issues: https://github.com/kubera/kubera-grok-plugin/issues
+- Issues: https://github.com/kubera-apps/kubera-grok-plugin/issues
 
 ## License
 
