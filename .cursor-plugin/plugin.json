@@ -1,0 +1,15 @@
+{
+  "name": "kubera",
+  "displayName": "Kubera",
+  "version": "1.0.0",
+  "description": "Query your live Kubera portfolio — net worth, assets, debts, allocation, performance and history — through Kubera's hosted MCP server.",
+  "author": {
+    "name": "Kubera Apps, Inc.",
+    "url": "https://www.kubera.com"
+  },
+  "homepage": "https://www.kubera.com",
+  "repository": "https://github.com/kubera/kubera-grok-plugin",
+  "license": "MIT",
+  "keywords": ["net-worth", "portfolio", "wealth", "mcp", "kubera", "finance"],
+  "logo": "assets/logo.svg"
+}
